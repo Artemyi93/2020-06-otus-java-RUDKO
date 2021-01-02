@@ -9,7 +9,6 @@ public class BirthDayTest {
     private int year;
     private int month;
     private int day;
-    private boolean result = false;
     private BirthDay birthDay;
 
     public BirthDayTest(int[] numbs) {
@@ -24,21 +23,23 @@ public class BirthDayTest {
     }
 
     @Test
-    public void checkToStringMethod() {
-        String date = String.format("%04d-%02d-%02d", year, month, day);
-        result = birthDay.toString().equals(date);
+    public void checkToStringMethod() throws Exception {
+        String expectedString = String.format("%04d-%02d-%02d", year, month, day);
+        assertTrue(birthDay.toString().equals(expectedString));
     }
 
     @Test
-    public void checkThanAgePositive() {
-        result = birthDay.getAge() >= 0;
+    public void checkThanAgePositive() throws Exception {
+        assertTrue(birthDay.getAge() >= 0);
     }
 
     @After
     public void afterTest() {
     }
 
-    public boolean getResult() {
-        return result;
+    private void assertTrue(boolean expression) throws Exception {
+        if (!expression) {
+            throw new Exception("Ошибка! Тест не пройден.");
+        }
     }
 }

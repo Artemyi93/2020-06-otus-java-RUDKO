@@ -5,6 +5,7 @@ import ru.otus.annotations.Before;
 import ru.otus.annotations.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,21 +41,29 @@ public class RunTests {
         // проводим тестирование на объектах тест-класса BirthDayTest
         for (Object objectTestData : testData) {
 
+            // переменная для проверки корректности тестовых данных
+            boolean invalidTestData = false;
             // создаем объект класса-теста
             BirthDayTest object = constructor.newInstance(objectTestData);
 
             for (Method metTest : methodsTest) {
                 // методы @Before
-                for (Method metBefore : methodsBefore) {
-                    metBefore.invoke(object);
+                try {
+                    for (Method metBefore : methodsBefore) {
+                        metBefore.invoke(object);
+                    }
+                } catch (InvocationTargetException e) {
+                    invalidTestData = true;
                 }
                 // текущий метод @Test
-                metTest.invoke(object);
-                count++;
-                if (object.getResult()) {
-                    success++;
-                } else {
-                    fail++;
+                if (!invalidTestData) {
+                    count++;
+                    try {
+                        metTest.invoke(object);
+                        success++;
+                    } catch (Exception e) {
+                        fail++;
+                    }
                 }
                 // методы @After
                 for (Method metAfter : methodsAfter) {
