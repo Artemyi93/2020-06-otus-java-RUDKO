@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /*
    java -Xms512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC
    java -Xms512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseParallelGC
+   java -Xms512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseSerialGC
  */
 
 public class Main {
@@ -22,8 +23,8 @@ public class Main {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
         switchOnMonitoring();
         long beginTime = System.currentTimeMillis();
-        int loopCounter = 1000;
-        int size = 5 * 1000 * 100;
+        int loopCounter = 10000;
+        int size = 5 * 1000;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("ru.otus:type=Benchmark");
 
